@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e65c75c2-fc28-44e8-a482-01ae38c0e2b4" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution>
+      <executable />
+    </execution>
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState>
+        <option name="isInclusion" value="true" />
+      </ProjectState>
+    </projectState>
+    <projectState path="$PROJECT_DIR$/auth-service">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="2.439046356142008" />
+      <entry key="MS500" value="5.483980947078934" />
+      <entry key="S2" value="14.379248425008479" />
+      <entry key="S5" value="23.49862340765066" />
+      <entry key="S10" value="29.540983095466892" />
+      <entry key="S30" value="41.73003495376105" />
+      <entry key="S60" value="65.79958257812964" />
+      <entry key="M2" value="127.88881301505056" />
+      <entry key="M5" value="273.5329434956158" />
+      <entry key="M10" value="468.05662149372887" />
+      <entry key="M15" value="625.4577316099804" />
+      <entry key="M30" value="932.8880736694916" />
+      <entry key="H1" value="1269.5149697273073" />
+      <entry key="H2" value="1601.141274861395" />
+      <entry key="H4" value="1860.5714537289405" />
+      <entry key="D1" value="2156.385900221207" />
+      <entry key="W1" value="2216.6445185846746" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="4.367561509803922E-211" />
+      <entry key="S5" value="7.179523345084536E-85" />
+      <entry key="S10" value="8.473206798541087E-43" />
+      <entry key="S30" value="9.462718817744155E-15" />
+      <entry key="S60" value="9.727653254419077E-8" />
+      <entry key="M2" value="3.120515866612831E-4" />
+      <entry key="M5" value="0.0415030584791363" />
+      <entry key="M10" value="0.24269779744340494" />
+      <entry key="M15" value="0.46493449691190175" />
+      <entry key="M30" value="0.936092901212217" />
+      <entry key="H1" value="1.3576100117108092" />
+      <entry key="H2" value="1.6445264137892899" />
+      <entry key="H4" value="1.8126721358922626" />
+      <entry key="D1" value="1.967349356487271" />
+      <entry key="W1" value="1.995299272083012" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="2.39263173688516" />
+      <entry key="MS500" value="5.460718982900202" />
+      <entry key="S2" value="14.363156273601021" />
+      <entry key="S5" value="23.48790466865312" />
+      <entry key="S10" value="29.534203178811918" />
+      <entry key="S30" value="41.72691353747341" />
+      <entry key="S60" value="65.7971959531176" />
+      <entry key="M2" value="127.8868314635374" />
+      <entry key="M5" value="273.5722320952283" />
+      <entry key="M10" value="468.2966341713628" />
+      <entry key="M15" value="625.9196930649305" />
+      <entry key="M30" value="933.8212943847213" />
+      <entry key="H1" value="1270.870356439155" />
+      <entry key="H2" value="1602.7843237674897" />
+      <entry key="H4" value="1862.3832504397003" />
+      <entry key="D1" value="2158.353078469267" />
+      <entry key="W1" value="2218.639792690146" />
+    </decayedShown>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3GgcmdFWfBSnMbhyAjG2oa3trO3" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build auth-service.executor": "Run",
+    "Gradle.auth-service [:com.example.onride.authservice.AuthServiceApplication.main()].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.AuthServiceApplication.executor": "Run",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/adityamishra/Desktop/onride",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm"
+  }
+}]]></component>
+  <component name="RunManager" selected="Spring Boot.AuthServiceApplication">
+    <configuration name="auth-service" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.example.onride.authservice.AuthServiceApplication" />
+      <module name="auth-service.main" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/auth-service" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AuthServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <envs>
+        <env name="DB_PASSWORD" value="npg_db2NGPKh1keQ" />
+        <env name="DB_URL" value="jdbc:postgresql://ep-square-wind-avljfszb.c-11.us-east-1.aws.neon.tech/neondb?sslmode=require" />
+        <env name="DB_USER" value="neondb_owner" />
+      </envs>
+      <module name="auth-service.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.onride.authservice.AuthServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Autodetect">
+      <module name="onride" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="false" />
+      <option name="RUN_TOOL" value="" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <module name="onride" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="false" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.auth-service" />
+      <item itemvalue="Spring Boot.AuthServiceApplication" />
+    </list>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-63390994e64e-intellij.indexing.shared.core-IU-262.8665.337" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e65c75c2-fc28-44e8-a482-01ae38c0e2b4" name="Changes" comment="" />
+      <created>1784396814169</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1784396814169</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="ride-service" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="org.springframework.beans.factory.BeanCreationException" package="org.springframework.beans.factory" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
