@@ -23,6 +23,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final RiderService riderService;
+    private final DriverService driverService;
 
     @Transactional
     public UserResponseDto signup(SignupRequestDto request) {
@@ -33,11 +34,12 @@ public class AuthService {
         User user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.password()));
 
-        // Using saveAndFlush to instantly commit the transaction to prevent null on the createdAt timestamp
         User saved = userRepository.saveAndFlush(user);
 
         if (saved.getRole() == Role.RIDER) {
             riderService.createInitialProfile(saved.getId());
+        } else if (saved.getRole() == Role.DRIVER) {
+            driverService.createInitialProfile(saved.getId());
         }
 
         return userMapper.toResponse(saved);
