@@ -1,7 +1,7 @@
 package com.onride.auth_service.controller;
 
-import com.onride.auth_service.dto.SignupRequest;
-import com.onride.auth_service.dto.UserResponse;
+import com.onride.auth_service.dto.SignupRequestDto;
+import com.onride.auth_service.dto.UserResponseDto;
 import com.onride.auth_service.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +22,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public UserResponse signup(@Valid @RequestBody SignupRequest request) {
+    public UserResponseDto signup(@Valid @RequestBody SignupRequestDto request) {
         return authService.signup(request);
     }
 
     @GetMapping("/users/{id}")
-    public UserResponse getUser(@PathVariable UUID id) {
+    public UserResponseDto getUser(@PathVariable UUID id) {
         return authService.getUser(id);
     }
 }

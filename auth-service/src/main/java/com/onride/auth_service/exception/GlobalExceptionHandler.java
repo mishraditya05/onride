@@ -1,7 +1,7 @@
 package com.onride.auth_service.exception;
 
-import com.onride.auth_service.exception.dto.ErrorResponse;
-import com.onride.auth_service.exception.dto.ValidationErrorResponse;
+import com.onride.auth_service.exception.dto.ErrorResponseDto;
+import com.onride.auth_service.exception.dto.ValidationErrorResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,9 +20,9 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ApiException.class)
-    public ResponseEntity<ErrorResponse> handleApiException(ApiException ex,
+    public ResponseEntity<ErrorResponseDto> handleApiException(ApiException ex,
                                                             HttpServletRequest request) {
-        ErrorResponse body = new ErrorResponse(
+        ErrorResponseDto body = new ErrorResponseDto(
                 Instant.now(),
                 ex.getStatus().value(),
                 ex.getErrorCode(),
@@ -34,15 +34,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ValidationErrorResponse handleValidation(MethodArgumentNotValidException ex,
+    public ValidationErrorResponseDto handleValidation(MethodArgumentNotValidException ex,
                                                     HttpServletRequest request) {
-        List<ValidationErrorResponse.FieldError> fieldErrors = ex.getBindingResult()
+        List<ValidationErrorResponseDto.FieldError> fieldErrors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(fe -> new ValidationErrorResponse.FieldError(fe.getField(), fe.getDefaultMessage()))
+                .map(fe -> new ValidationErrorResponseDto.FieldError(fe.getField(), fe.getDefaultMessage()))
                 .toList();
 
-        return new ValidationErrorResponse(
+        return new ValidationErrorResponseDto(
                 Instant.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 ErrorCode.VALIDATION_FAILED,
@@ -54,9 +54,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleUnreadable(HttpMessageNotReadableException ex,
+    public ErrorResponseDto handleUnreadable(HttpMessageNotReadableException ex,
                                           HttpServletRequest request) {
-        return new ErrorResponse(
+        return new ErrorResponseDto(
                 Instant.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 ErrorCode.MALFORMED_REQUEST,
@@ -67,10 +67,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleUnexpected(Exception ex, HttpServletRequest request) {
+    public ErrorResponseDto handleUnexpected(Exception ex, HttpServletRequest request) {
         log.error("Unhandled exception at {}", request.getRequestURI(), ex);
 
-        return new ErrorResponse(
+        return new ErrorResponseDto(
                 Instant.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 ErrorCode.INTERNAL_ERROR,

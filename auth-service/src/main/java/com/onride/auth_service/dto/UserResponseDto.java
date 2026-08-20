@@ -6,7 +6,7 @@ import com.onride.auth_service.enums.Role;
 import java.time.Instant;
 import java.util.UUID;
 
-public record UserResponse(
+public record UserResponseDto(
         UUID id,
         String email,
         Role role,
