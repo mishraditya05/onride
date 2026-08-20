@@ -1,10 +1,12 @@
 package com.onride.auth_service.service;
 
+import com.onride.auth_service.dto.LoginRequestDto;
 import com.onride.auth_service.dto.SignupRequestDto;
 import com.onride.auth_service.dto.UserResponseDto;
 import com.onride.auth_service.entity.User;
 import com.onride.auth_service.enums.Role;
 import com.onride.auth_service.exception.EmailAlreadyExistsException;
+import com.onride.auth_service.exception.InvalidCredentialsException;
 import com.onride.auth_service.exception.ResourceNotFoundException;
 import com.onride.auth_service.mapper.UserMapper;
 import com.onride.auth_service.repository.UserRepository;
@@ -43,6 +45,17 @@ public class AuthService {
         }
 
         return userMapper.toResponse(saved);
+    }
+
+    public UserResponseDto login(LoginRequestDto request) {
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
+
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
+            throw new InvalidCredentialsException("Invalid email or password");
+        }
+
+        return userMapper.toResponse(user);
     }
 
     public UserResponseDto getUser(UUID id) {
