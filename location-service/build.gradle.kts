@@ -14,12 +14,14 @@ java {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
 }
 
 extra["springCloudVersion"] = "2025.1.2"
 
 dependencies {
+	implementation("com.onride:onride-common-web:0.1.0")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.boot:spring-boot-starter-validation")

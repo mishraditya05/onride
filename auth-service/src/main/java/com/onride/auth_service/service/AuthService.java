@@ -7,7 +7,7 @@ import com.onride.auth_service.entity.User;
 import com.onride.auth_service.enums.Role;
 import com.onride.auth_service.exception.EmailAlreadyExistsException;
 import com.onride.auth_service.exception.InvalidCredentialsException;
-import com.onride.auth_service.exception.ResourceNotFoundException;
+import com.onride.common.web.error.ResourceNotFoundException;
 import com.onride.auth_service.mapper.UserMapper;
 import com.onride.auth_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

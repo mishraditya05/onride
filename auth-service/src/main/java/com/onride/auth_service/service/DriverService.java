@@ -4,7 +4,7 @@ import com.onride.auth_service.dto.DriverResponseDto;
 import com.onride.auth_service.dto.UpdateDriverRequestDto;
 import com.onride.auth_service.entity.Driver;
 import com.onride.auth_service.enums.DriverOnboardingStage;
-import com.onride.auth_service.exception.ResourceNotFoundException;
+import com.onride.common.web.error.ResourceNotFoundException;
 import com.onride.auth_service.mapper.DriverMapper;
 import com.onride.auth_service.repository.DriverRepository;
 import lombok.RequiredArgsConstructor;

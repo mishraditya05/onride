@@ -4,7 +4,7 @@ import com.onride.auth_service.dto.RiderResponseDto;
 import com.onride.auth_service.dto.UpdateRiderRequestDto;
 import com.onride.auth_service.entity.Rider;
 import com.onride.auth_service.enums.RiderOnboardingStage;
-import com.onride.auth_service.exception.ResourceNotFoundException;
+import com.onride.common.web.error.ResourceNotFoundException;
 import com.onride.auth_service.mapper.RiderMapper;
 import com.onride.auth_service.repository.RiderRepository;
 import lombok.RequiredArgsConstructor;
