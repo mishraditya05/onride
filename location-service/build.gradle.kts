@@ -20,6 +20,7 @@ repositories {
 extra["springCloudVersion"] = "2025.1.2"
 
 dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
@@ -41,6 +42,13 @@ dependencyManagement {
 	}
 }
 
+val nativeAccess = listOf("--enable-native-access=ALL-UNNAMED")
+
 tasks.withType<Test> {
 	useJUnitPlatform()
+	jvmArgs(nativeAccess)
+}
+
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+	jvmArgs(nativeAccess)
 }

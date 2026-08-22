@@ -16,6 +16,13 @@ spring:
               filters:
                 - StripPrefix=2
 
+            - id: location-service
+              uri: lb://LOCATION-SERVICE
+              predicates:
+                - Path=/api/v1/locations/**
+              filters:
+                - StripPrefix=2
+
 eureka:
   client:
     service-url:
