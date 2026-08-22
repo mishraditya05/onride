@@ -1,6 +1,7 @@
 package com.onride.auth_service.entity;
 
 import com.onride.auth_service.enums.VehicleStatus;
+import com.onride.auth_service.enums.VehicleType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +39,10 @@ public class Vehicle {
 
     @Column(name = "license_plate", nullable = false, unique = true)
     private String licensePlate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "vehicle_type", nullable = false)
+    private VehicleType vehicleType;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

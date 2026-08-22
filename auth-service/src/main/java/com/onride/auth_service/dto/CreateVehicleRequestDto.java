@@ -1,5 +1,6 @@
 package com.onride.auth_service.dto;
 
+import com.onride.auth_service.enums.VehicleType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -18,7 +19,10 @@ public record CreateVehicleRequestDto(
         String color,
 
         @NotBlank(message = "licensePlate must not be blank")
-        String licensePlate
+        String licensePlate,
+
+        @NotNull(message = "vehicleType must not be null")
+        VehicleType vehicleType
 
 ) {
 }
