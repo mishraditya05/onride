@@ -14,6 +14,11 @@ public final class RedisKeys {
         return DRIVER_PREFIX + driverId;
     }
 
+    // Read paths get ids back from Redis as plain strings.
+    public static String driver(String driverId) {
+        return DRIVER_PREFIX + driverId;
+    }
+
     public static String cell(String cellId) {
         return CELL_PREFIX + cellId;
     }

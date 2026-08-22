@@ -17,7 +17,14 @@ public record LocationProperties(
         int h3Resolution,
 
         @NotNull(message = "positionTtl must be set")
-        Duration positionTtl
+        Duration positionTtl,
+        
+        @NotNull(message = "staleAfter must be set")
+        Duration staleAfter,
+
+        @Min(value = 0, message = "searchRings must be between 0 and 5")
+        @Max(value = 5, message = "searchRings must be between 0 and 5")
+        int searchRings
 
 ) {
 }
