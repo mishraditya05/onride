@@ -9,7 +9,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface DriverMapper {
 
-    DriverResponseDto toResponse(Driver driver);
+    DriverResponseDto toDriverResponseDto(Driver driver);
 
-    void updateEntity(UpdateDriverRequestDto request, @MappingTarget Driver driver);
+    void updateFromDto(UpdateDriverRequestDto dto, @MappingTarget Driver driver);
 }

@@ -28,21 +28,21 @@ public class VehicleService {
     public VehicleResponseDto addVehicle(UUID userId, CreateVehicleRequestDto request) {
         Driver driver = driverService.findByUserId(userId);
 
-        Vehicle vehicle = vehicleMapper.toEntity(request);
+        Vehicle vehicle = vehicleMapper.fromDto(request);
         vehicle.setDriverId(driver.getId());
         Vehicle saved = vehicleRepository.save(vehicle);
 
         driver.setOnboardingStage(DriverOnboardingStage.VERIFICATION_PENDING);
         driverRepository.save(driver);
 
-        return vehicleMapper.toResponse(saved);
+        return vehicleMapper.toVehicleResponseDto(saved);
     }
 
     public List<VehicleResponseDto> listMyVehicles(UUID userId) {
         Driver driver = driverService.findByUserId(userId);
         return vehicleRepository.findByDriverId(driver.getId())
                 .stream()
-                .map(vehicleMapper::toResponse)
+                .map(vehicleMapper::toVehicleResponseDto)
                 .toList();
     }
 }

@@ -33,7 +33,7 @@ public class AuthService {
             throw new EmailAlreadyExistsException("Email already registered: " + request.email());
         }
 
-        User user = userMapper.toEntity(request);
+        User user = userMapper.fromDto(request);
         user.setPassword(passwordEncoder.encode(request.password()));
 
         User saved = userRepository.saveAndFlush(user);
@@ -44,7 +44,7 @@ public class AuthService {
             driverService.createInitialProfile(saved.getId());
         }
 
-        return userMapper.toResponse(saved);
+        return userMapper.toUserResponseDto(saved);
     }
 
     public UserResponseDto login(LoginRequestDto request) {
@@ -55,12 +55,12 @@ public class AuthService {
             throw new InvalidCredentialsException("Invalid email or password");
         }
 
-        return userMapper.toResponse(user);
+        return userMapper.toUserResponseDto(user);
     }
 
     public UserResponseDto getUser(UUID id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + id));
-        return userMapper.toResponse(user);
+        return userMapper.toUserResponseDto(user);
     }
 }

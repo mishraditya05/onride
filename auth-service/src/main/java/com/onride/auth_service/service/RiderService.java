@@ -30,14 +30,14 @@ public class RiderService {
     }
 
     public RiderResponseDto getByUserId(UUID userId) {
-        return riderMapper.toResponse(findByUserId(userId));
+        return riderMapper.toRiderResponseDto(findByUserId(userId));
     }
 
     public RiderResponseDto updateProfile(UUID userId, UpdateRiderRequestDto request) {
         Rider rider = findByUserId(userId);
-        riderMapper.updateEntity(request, rider);
+        riderMapper.updateFromDto(request, rider);
         rider.setOnboardingStage(RiderOnboardingStage.PROFILE_COMPLETE);
-        return riderMapper.toResponse(riderRepository.save(rider));
+        return riderMapper.toRiderResponseDto(riderRepository.save(rider));
     }
 
     private Rider findByUserId(UUID userId) {

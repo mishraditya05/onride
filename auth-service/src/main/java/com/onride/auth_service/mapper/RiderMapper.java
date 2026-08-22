@@ -9,7 +9,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface RiderMapper {
 
-    RiderResponseDto toResponse(Rider rider);
+    RiderResponseDto toRiderResponseDto(Rider rider);
 
-    void updateEntity(UpdateRiderRequestDto request, @MappingTarget Rider rider);
+    void updateFromDto(UpdateRiderRequestDto dto, @MappingTarget Rider rider);
 }

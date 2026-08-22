@@ -30,14 +30,14 @@ public class DriverService {
     }
 
     public DriverResponseDto getByUserId(UUID userId) {
-        return driverMapper.toResponse(findByUserId(userId));
+        return driverMapper.toDriverResponseDto(findByUserId(userId));
     }
 
     public DriverResponseDto updateProfile(UUID userId, UpdateDriverRequestDto request) {
         Driver driver = findByUserId(userId);
-        driverMapper.updateEntity(request, driver);
+        driverMapper.updateFromDto(request, driver);
         driver.setOnboardingStage(DriverOnboardingStage.VEHICLE_PENDING);
-        return driverMapper.toResponse(driverRepository.save(driver));
+        return driverMapper.toDriverResponseDto(driverRepository.save(driver));
     }
 
     Driver findByUserId(UUID userId) {
