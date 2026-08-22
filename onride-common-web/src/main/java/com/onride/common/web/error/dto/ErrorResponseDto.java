@@ -1,13 +1,11 @@
-package com.onride.auth_service.exception.dto;
-
-import com.onride.auth_service.exception.ErrorCode;
+package com.onride.common.web.error.dto;
 
 import java.time.Instant;
 
 public record ErrorResponseDto(
         Instant timestamp,
         int status,
-        ErrorCode error,
+        String error,
         String message,
         String path
 ) {

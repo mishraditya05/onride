@@ -1,0 +1,1 @@
+rootProject.name = "onride-common-web"
