@@ -23,6 +23,13 @@ spring:
               filters:
                 - StripPrefix=2
 
+            - id: ride-service
+              uri: lb://RIDE-SERVICE
+              predicates:
+                - Path=/api/v1/rides/**
+              filters:
+                - StripPrefix=2
+
 eureka:
   client:
     service-url:
