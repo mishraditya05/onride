@@ -7,8 +7,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/rides")
@@ -18,7 +21,9 @@ public class RideController {
     private final QuoteService quoteService;
 
     @PostMapping("/quotes")
-    public QuoteResponseDto getQuotes(@Valid @RequestBody QuoteRequestDto request) {
-        return quoteService.getQuotes(request);
+    public QuoteResponseDto getQuotes(
+            @RequestHeader("X-User-Id") UUID riderId,
+            @Valid @RequestBody QuoteRequestDto request) {
+        return quoteService.getQuotes(riderId, request);
     }
 }

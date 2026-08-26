@@ -4,8 +4,8 @@ import java.util.UUID;
 
 public final class RedisKeys {
 
-    public static final String CELL_PREFIX = "cell:";
-    private static final String DRIVER_PREFIX = "driver:";
+    public static final String CELL_PREFIX = "loc:cell:";
+    private static final String DRIVER_PREFIX = "loc:driver:";
 
     private RedisKeys() {
     }

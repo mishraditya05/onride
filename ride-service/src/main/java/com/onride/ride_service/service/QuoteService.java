@@ -7,14 +7,19 @@ import com.onride.ride_service.dto.QuoteRequestDto;
 import com.onride.ride_service.dto.QuoteResponseDto;
 import com.onride.ride_service.dto.VehicleQuoteDto;
 import com.onride.ride_service.enums.VehicleType;
+import com.onride.ride_service.mapper.QuoteMapper;
+import com.onride.ride_service.redis.Quote;
+import com.onride.ride_service.redis.QuoteStore;
 import com.onride.ride_service.util.GeoUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -27,8 +32,10 @@ public class QuoteService {
     private final LocationClient locationClient;
     private final FareCalculator fareCalculator;
     private final PricingProperties pricing;
+    private final QuoteStore quoteStore;
+    private final QuoteMapper quoteMapper;
 
-    public QuoteResponseDto getQuotes(QuoteRequestDto request) {
+    public QuoteResponseDto getQuotes(UUID riderId, QuoteRequestDto request) {
         long distanceMetres = Math.round(GeoUtils.haversineMetres(
                 request.pickupLat(), request.pickupLng(),
                 request.dropLat(), request.dropLng()) * pricing.roadFactor());
@@ -36,15 +43,26 @@ public class QuoteService {
         long tripDurationSeconds = secondsToCover(distanceMetres);
 
         List<NearbyDriverDto> drivers = findNearbyDrivers(request.pickupLat(), request.pickupLng());
+        log.debug("{} drivers nearby for pickup ({}, {}); not yet factored into fare",
+                drivers.size(), request.pickupLat(), request.pickupLng());
 
         Map<VehicleType, VehicleQuoteDto> vehicle = new EnumMap<>(VehicleType.class);
         for (VehicleType vehicleType : VehicleType.values()) {
             vehicle.put(vehicleType, new VehicleQuoteDto(
-                    fareCalculator.fareFor(vehicleType, distanceMetres, tripDurationSeconds),
-                    drivers.size()));
+                    fareCalculator.fareFor(vehicleType, distanceMetres, tripDurationSeconds)));
         }
 
-        return new QuoteResponseDto(CURRENCY, distanceMetres, vehicle);
+        Map<VehicleType, BigDecimal> fares = new EnumMap<>(VehicleType.class);
+        vehicle.forEach((vehicleType, vehicleQuote) -> fares.put(vehicleType, vehicleQuote.fare()));
+
+        Quote quote = new Quote(
+                UUID.randomUUID(), riderId,
+                request.pickupLat(), request.pickupLng(), request.dropLat(), request.dropLng(),
+                CURRENCY, distanceMetres, fares);
+
+        quoteStore.save(quote, pricing.quoteTtl());
+
+        return quoteMapper.toQuoteResponseDto(quote, vehicle);
     }
 
     private List<NearbyDriverDto> findNearbyDrivers(double lat, double lng) {

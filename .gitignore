@@ -3,3 +3,12 @@
 
 # macOS
 .DS_Store
+
+# Redis (local dev server run from a repo/service directory)
+*.rdb
+appendonlydir/
+*.aof
+
+# Local secrets
+.env
+*.env.local
