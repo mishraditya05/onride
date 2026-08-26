@@ -1,5 +1,6 @@
 package com.onride.location_service.service;
 
+import com.onride.common.web.geo.GeoIndex;
 import com.onride.location_service.config.LocationProperties;
 import com.onride.location_service.dto.LocationPingRequestDto;
 import com.onride.location_service.dto.LocationPingResponseDto;
@@ -18,22 +19,22 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LocationService {
 
-    private final H3IndexService h3Index;
+    private final GeoIndex geoIndex;
     private final DriverLocationStore store;
     private final LocationProperties properties;
     private final Clock clock;
 
     public LocationPingResponseDto recordPing(UUID driverId, LocationPingRequestDto request) {
         long now = clock.millis();
-        String cellId = h3Index.toCell(request.lat(), request.lng());
+        String cellId = geoIndex.toCell(request.lat(), request.lng());
 
         boolean changedCell = store.savePosition(driverId, request.lat(), request.lng(), cellId, now);
 
         return new LocationPingResponseDto(cellId, now, changedCell);
     }
-    
+
     public List<NearbyDriverDto> findNearby(double lat, double lng, int limit) {
-        List<String> cells = h3Index.neighbours(h3Index.toCell(lat, lng), properties.searchRings());
+        List<String> cells = geoIndex.neighbours(geoIndex.toCell(lat, lng), properties.searchRings());
         long freshSince = clock.millis() - properties.staleAfter().toMillis();
 
         Set<String> candidates = store.findFreshDriverIds(cells, freshSince);
@@ -46,7 +47,7 @@ public class LocationService {
                         position.driverId(),
                         position.lat(),
                         position.lng(),
-                        Math.round(h3Index.distanceMetres(lat, lng, position.lat(), position.lng())),
+                        Math.round(geoIndex.distanceMetres(lat, lng, position.lat(), position.lng())),
                         position.timestamp()))
                 .sorted(Comparator.comparingLong(NearbyDriverDto::distanceMetres))
                 .limit(limit)

@@ -26,6 +26,8 @@ dependencies {
 	compileOnly("jakarta.servlet:jakarta.servlet-api")
 	compileOnly("jakarta.validation:jakarta.validation-api")
 	compileOnly("org.slf4j:slf4j-api")
+
+	api("com.uber:h3:4.1.1")
 }
 
 publishing {

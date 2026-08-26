@@ -1,26 +1,23 @@
-package com.onride.location_service.service;
+package com.onride.common.web.geo;
 
-import com.onride.location_service.config.LocationProperties;
 import com.uber.h3core.H3Core;
 import com.uber.h3core.LengthUnit;
 import com.uber.h3core.util.LatLng;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class H3IndexService {
+public class GeoIndex {
+
+    private static final int RESOLUTION = 9;
 
     private final H3Core h3;
-    private final int resolution;
 
-    public H3IndexService(H3Core h3, LocationProperties properties) {
+    public GeoIndex(H3Core h3) {
         this.h3 = h3;
-        this.resolution = properties.h3Resolution();
     }
 
     public String toCell(double lat, double lng) {
-        return h3.latLngToCellAddress(lat, lng, resolution);
+        return h3.latLngToCellAddress(lat, lng, RESOLUTION);
     }
 
     public List<String> neighbours(String cell, int rings) {

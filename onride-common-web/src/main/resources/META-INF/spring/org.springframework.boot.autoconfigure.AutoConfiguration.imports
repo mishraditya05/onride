@@ -1,1 +1,2 @@
 com.onride.common.web.error.ErrorHandlingAutoConfiguration
+com.onride.common.web.geo.GeoAutoConfiguration
