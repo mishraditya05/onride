@@ -7,6 +7,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,6 +23,18 @@ public class QuoteStore {
             redis.opsForValue().set(RedisKeys.quote(quote.riderId()), json, ttl);
         } catch (JsonProcessingException ex) {
             throw new IllegalStateException("Failed to serialize quote " + quote.quoteId(), ex);
+        }
+    }
+
+    public Optional<Quote> findAndDelete(UUID riderId) {
+        String json = redis.opsForValue().getAndDelete(RedisKeys.quote(riderId));
+        if (json == null) {
+            return Optional.empty();
+        }
+        try {
+            return Optional.of(objectMapper.readValue(json, Quote.class));
+        } catch (JsonProcessingException ex) {
+            throw new IllegalStateException("Failed to deserialize quote for rider " + riderId, ex);
         }
     }
 }

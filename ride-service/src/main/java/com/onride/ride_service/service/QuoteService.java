@@ -8,9 +8,9 @@ import com.onride.ride_service.dto.QuoteResponseDto;
 import com.onride.ride_service.dto.VehicleQuoteDto;
 import com.onride.ride_service.enums.VehicleType;
 import com.onride.ride_service.mapper.QuoteMapper;
+import com.onride.common.web.geo.GeoIndex;
 import com.onride.ride_service.redis.Quote;
 import com.onride.ride_service.redis.QuoteStore;
-import com.onride.ride_service.util.GeoUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,6 +29,7 @@ public class QuoteService {
     private static final int NEARBY_LIMIT = 10;
     private static final String CURRENCY = "INR";
 
+    private final GeoIndex geoIndex;
     private final LocationClient locationClient;
     private final FareCalculator fareCalculator;
     private final PricingProperties pricing;
@@ -36,7 +37,7 @@ public class QuoteService {
     private final QuoteMapper quoteMapper;
 
     public QuoteResponseDto getQuotes(UUID riderId, QuoteRequestDto request) {
-        long distanceMetres = Math.round(GeoUtils.haversineMetres(
+        long distanceMetres = Math.round(geoIndex.distanceMetres(
                 request.pickupLat(), request.pickupLng(),
                 request.dropLat(), request.dropLng()) * pricing.roadFactor());
 
