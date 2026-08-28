@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "RideRequestedEvent",
+  "namespace": "com.onride.events",
+  "doc": "Published by ride-service when a ride is booked",
+  "fields": [
+    { "name": "rideId", "type": "string" },
+    { "name": "riderId", "type": "string" },
+    { "name": "pickupCell", "type": "string" }
+  ]
+}

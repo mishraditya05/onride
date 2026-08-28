@@ -1,9 +1,0 @@
-{
-  "type": "record",
-  "name": "Ping",
-  "namespace": "com.onride.events",
-  "doc": "Throwaway schema to prove the codegen pipeline works. Delete once a real event schema exists.",
-  "fields": [
-    { "name": "message", "type": "string" }
-  ]
-}
