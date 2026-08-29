@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package onride.location.v1;
+
+option java_package = "com.onride.location.grpc.v1";
+option java_multiple_files = true;
+
+service LocationService {
+  rpc GetNearbyDrivers(NearbyDriversRequest) returns (NearbyDriversResponse);
+}
+
+message NearbyDriversRequest {
+  double lat = 1;
+  double lng = 2;
+  int32 limit = 3;
+}
+
+message NearbyDriversResponse {
+  repeated DriverPosition drivers = 1;
+}
+
+message DriverPosition {
+  string driver_id = 1;
+  double lat = 2;
+  double lng = 3;
+  int64 distance_metres = 4;
+  int64 last_seen_at = 5;
+}
