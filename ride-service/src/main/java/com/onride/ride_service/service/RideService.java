@@ -2,16 +2,20 @@ package com.onride.ride_service.service;
 
 import com.onride.common.web.error.ResourceNotFoundException;
 import com.onride.common.web.geo.GeoIndex;
+import com.onride.events.RideRequestedEvent;
 import com.onride.ride_service.dto.BookRideRequestDto;
 import com.onride.ride_service.dto.BookRideResponseDto;
 import com.onride.ride_service.entity.Ride;
 import com.onride.ride_service.enums.RideStatus;
 import com.onride.ride_service.enums.VehicleType;
+import com.onride.ride_service.mapper.RideEventMapper;
 import com.onride.ride_service.mapper.RideMapper;
 import com.onride.ride_service.redis.Quote;
 import com.onride.ride_service.redis.QuoteStore;
 import com.onride.ride_service.repository.RideRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +30,11 @@ public class RideService {
     private final GeoIndex geoIndex;
     private final RideRepository rideRepository;
     private final RideMapper rideMapper;
+    private final RideEventMapper rideEventMapper;
+    private final KafkaTemplate<String, RideRequestedEvent> kafkaTemplate;
+
+    @Value("${kafka.topic.ride-requested-topic}")
+    private String rideRequestedTopic;
 
     @Transactional
     public BookRideResponseDto book(UUID riderId, BookRideRequestDto request) {
@@ -44,6 +53,9 @@ public class RideService {
 
         Ride ride = buildRide(riderId, quote, request.vehicleType(), fare, pickupGeoCell);
         rideRepository.save(ride);
+
+        RideRequestedEvent event = rideEventMapper.toRideRequestedEvent(ride);
+        kafkaTemplate.send(rideRequestedTopic, pickupGeoCell, event);
 
         return rideMapper.toBookRideResponseDto(ride);
     }

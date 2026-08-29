@@ -6,6 +6,6 @@
   "fields": [
     { "name": "rideId", "type": "string" },
     { "name": "riderId", "type": "string" },
-    { "name": "pickupCell", "type": "string" }
+    { "name": "pickupGeoCell", "type": "string" }
   ]
 }
