@@ -1,7 +1,7 @@
 package com.onride.ride_service.service;
 
-import com.onride.ride_service.client.LocationClient;
 import com.onride.ride_service.client.dto.NearbyDriverDto;
+import com.onride.ride_service.grpc.LocationGrpcClient;
 import com.onride.ride_service.config.PricingProperties;
 import com.onride.ride_service.dto.QuoteRequestDto;
 import com.onride.ride_service.dto.QuoteResponseDto;
@@ -30,7 +30,7 @@ public class QuoteService {
     private static final String CURRENCY = "INR";
 
     private final GeoIndex geoIndex;
-    private final LocationClient locationClient;
+    private final LocationGrpcClient locationClient;
     private final FareCalculator fareCalculator;
     private final PricingProperties pricing;
     private final QuoteStore quoteStore;
