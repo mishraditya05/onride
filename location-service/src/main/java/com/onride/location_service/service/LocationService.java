@@ -2,6 +2,7 @@ package com.onride.location_service.service;
 
 import com.onride.common.web.geo.GeoIndex;
 import com.onride.location_service.config.LocationProperties;
+import com.onride.location_service.dto.DriverInCellDto;
 import com.onride.location_service.dto.LocationPingRequestDto;
 import com.onride.location_service.dto.LocationPingResponseDto;
 import com.onride.location_service.dto.NearbyDriverDto;
@@ -51,6 +52,23 @@ public class LocationService {
                         position.timestamp()))
                 .sorted(Comparator.comparingLong(NearbyDriverDto::distanceMetres))
                 .limit(limit)
+                .toList();
+    }
+
+    public List<DriverInCellDto> findDriversInCell(String cellId) {
+        long freshSince = clock.millis() - properties.staleAfter().toMillis();
+
+        Set<String> candidates = store.findFreshDriverIds(List.of(cellId), freshSince);
+        if (candidates.isEmpty()) {
+            return List.of();
+        }
+
+        return store.findPositions(candidates).stream()
+                .map(position -> new DriverInCellDto(
+                        position.driverId(),
+                        position.lat(),
+                        position.lng(),
+                        position.timestamp()))
                 .toList();
     }
 }
