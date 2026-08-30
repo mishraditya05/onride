@@ -22,7 +22,7 @@ repositories {
 extra["springCloudVersion"] = "2025.1.2"
 
 dependencies {
-	implementation("com.onride:onride-common-web:0.1.0")
+	implementation("com.onride:onride-common-web:0.2.0")
 	implementation("com.onride:onride-event-schemas:0.1.0")
 	implementation("com.onride:onride-grpc-contracts:0.1.0")
 	implementation("net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE")

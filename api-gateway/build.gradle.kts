@@ -14,16 +14,20 @@ java {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
 }
 
 extra["springCloudVersion"] = "2025.1.2"
 
 dependencies {
+	implementation("com.onride:onride-common-web:0.2.0")
 	implementation("org.springframework.cloud:spring-cloud-starter-gateway-server-webflux")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
+	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

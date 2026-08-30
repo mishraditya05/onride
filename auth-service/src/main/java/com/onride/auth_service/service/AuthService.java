@@ -1,5 +1,6 @@
 package com.onride.auth_service.service;
 
+import com.onride.auth_service.dto.AuthResponseDto;
 import com.onride.auth_service.dto.LoginRequestDto;
 import com.onride.auth_service.dto.SignupRequestDto;
 import com.onride.auth_service.dto.UserResponseDto;
@@ -10,6 +11,7 @@ import com.onride.auth_service.exception.InvalidCredentialsException;
 import com.onride.common.web.error.ResourceNotFoundException;
 import com.onride.auth_service.mapper.UserMapper;
 import com.onride.auth_service.repository.UserRepository;
+import com.onride.common.web.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ public class AuthService {
     private final UserMapper userMapper;
     private final RiderService riderService;
     private final DriverService driverService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public UserResponseDto signup(SignupRequestDto request) {
@@ -47,7 +50,7 @@ public class AuthService {
         return userMapper.toUserResponseDto(saved);
     }
 
-    public UserResponseDto login(LoginRequestDto request) {
+    public AuthResponseDto login(LoginRequestDto request) {
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
 
@@ -55,7 +58,8 @@ public class AuthService {
             throw new InvalidCredentialsException("Invalid email or password");
         }
 
-        return userMapper.toUserResponseDto(user);
+        String accessToken = jwtTokenProvider.generate(user.getId().toString(), user.getRole().name());
+        return new AuthResponseDto(accessToken, userMapper.toUserResponseDto(user));
     }
 
     public UserResponseDto getUser(UUID id) {

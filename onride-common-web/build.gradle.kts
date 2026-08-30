@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.onride"
-version = "0.1.0"
+version = "0.2.0"
 
 java {
 	toolchain {
@@ -28,6 +28,10 @@ dependencies {
 	compileOnly("org.slf4j:slf4j-api")
 
 	api("com.uber:h3:4.1.1")
+
+	implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 }
 
 publishing {

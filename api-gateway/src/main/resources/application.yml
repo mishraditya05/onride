@@ -35,3 +35,8 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
+onride:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration-seconds: ${JWT_EXPIRATION_SECONDS:900}
+

@@ -1,5 +1,6 @@
 package com.onride.auth_service.controller;
 
+import com.onride.auth_service.dto.AuthResponseDto;
 import com.onride.auth_service.dto.LoginRequestDto;
 import com.onride.auth_service.dto.SignupRequestDto;
 import com.onride.auth_service.dto.UserResponseDto;
@@ -28,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public UserResponseDto login(@Valid @RequestBody LoginRequestDto request) {
+    public AuthResponseDto login(@Valid @RequestBody LoginRequestDto request) {
         return authService.login(request);
     }
 

@@ -31,7 +31,7 @@ public class LocationController {
     private final LocationService locationService;
 
     @PostMapping("/ping")
-    public LocationPingResponseDto ping(@RequestHeader("X-Driver-Id") UUID driverId,
+    public LocationPingResponseDto ping(@RequestHeader("X-User-Id") UUID driverId,
                                        @Valid @RequestBody LocationPingRequestDto request) {
         return locationService.recordPing(driverId, request);
     }
