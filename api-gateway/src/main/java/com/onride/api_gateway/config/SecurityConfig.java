@@ -30,8 +30,10 @@ public class SecurityConfig {
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers("/api/v1/auth/signup", "/api/v1/auth/login").permitAll()
                         .pathMatchers("/api/v1/auth/users/**").hasRole("ADMIN")
+                        .pathMatchers("/api/v1/rides/quotes", "/api/v1/rides/book").hasRole("RIDER")
+                        .pathMatchers("/api/v1/rides/matches", "/api/v1/rides/*/accept").hasRole("DRIVER")
+                        .pathMatchers("/api/v1/riders/**").hasRole("RIDER")
                         .pathMatchers("/api/v1/drivers/**", "/api/v1/locations/ping").hasRole("DRIVER")
-                        .pathMatchers("/api/v1/riders/**", "/api/v1/rides/**").hasRole("RIDER")
                         .anyExchange().authenticated())
                 .exceptionHandling(handling -> handling
                         .authenticationEntryPoint(authenticationEntryPoint)
