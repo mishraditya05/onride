@@ -3,11 +3,15 @@ package com.onride.ride_service.service;
 import com.onride.common.web.error.ResourceNotFoundException;
 import com.onride.common.web.geo.GeoIndex;
 import com.onride.events.RideRequestedEvent;
+import com.onride.ride_service.client.dto.MatchInfoDto;
+import com.onride.ride_service.dto.AcceptMatchResponseDto;
 import com.onride.ride_service.dto.BookRideRequestDto;
 import com.onride.ride_service.dto.BookRideResponseDto;
+import com.onride.ride_service.dto.PendingMatchResponseDto;
 import com.onride.ride_service.entity.Ride;
 import com.onride.ride_service.enums.RideStatus;
 import com.onride.ride_service.enums.VehicleType;
+import com.onride.ride_service.grpc.MatchingGrpcClient;
 import com.onride.ride_service.mapper.RideEventMapper;
 import com.onride.ride_service.mapper.RideMapper;
 import com.onride.ride_service.redis.Quote;
@@ -32,6 +36,7 @@ public class RideService {
     private final RideMapper rideMapper;
     private final RideEventMapper rideEventMapper;
     private final KafkaTemplate<String, RideRequestedEvent> kafkaTemplate;
+    private final MatchingGrpcClient matchingGrpcClient;
 
     @Value("${kafka.topic.ride-requested-topic}")
     private String rideRequestedTopic;
@@ -58,6 +63,31 @@ public class RideService {
         kafkaTemplate.send(rideRequestedTopic, pickupGeoCell, event);
 
         return rideMapper.toBookRideResponseDto(ride);
+    }
+
+    public PendingMatchResponseDto getPendingMatch(UUID driverId) {
+        return matchingGrpcClient.getMatchForDriver(driverId)
+                .map(match -> new PendingMatchResponseDto(true, match.matchId(), match.rideId(), match.riderId()))
+                .orElseGet(() -> new PendingMatchResponseDto(false, null, null, null));
+    }
+
+    @Transactional
+    public AcceptMatchResponseDto acceptMatch(UUID driverId, UUID rideId, UUID matchId) {
+        MatchInfoDto match = matchingGrpcClient.confirmMatch(driverId, matchId)
+                .orElseThrow(() -> new ResourceNotFoundException("Match expired or already confirmed"));
+
+        if (!match.rideId().equals(rideId)) {
+            throw new ResourceNotFoundException("Match does not correspond to this ride");
+        }
+
+        Ride ride = rideRepository.findById(rideId)
+                .orElseThrow(() -> new ResourceNotFoundException("Ride not found"));
+
+        ride.setDriverId(driverId);
+        ride.setStatus(RideStatus.MATCHED);
+        rideRepository.save(ride);
+
+        return new AcceptMatchResponseDto(ride.getId(), ride.getStatus(), ride.getDriverId());
     }
 
     private static Ride buildRide(UUID riderId, Quote quote, VehicleType vehicleType,
