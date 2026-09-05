@@ -6,6 +6,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record MatchingProperties(
         int averageSpeedKmph,
         long batchIntervalMs,
-        long offerLockTtlSeconds
+        long offerWindowSeconds
 ) {
 }

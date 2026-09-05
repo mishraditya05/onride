@@ -23,4 +23,12 @@ public final class RedisKeys {
     public static String matched(String driverId) {
         return MATCHED_RIDES_PREFIX + driverId;
     }
+
+    public static String matchedPattern() {
+        return MATCHED_RIDES_PREFIX + "*";
+    }
+
+    public static String driverIdOf(String matchedKey) {
+        return matchedKey.substring(MATCHED_RIDES_PREFIX.length());
+    }
 }

@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public record MatchedRideDto(
         UUID matchId,
-        UUID rideId,
-        UUID riderId
+        long expiresAt,
+        PendingRideRequestDto rider
 ) {
 }

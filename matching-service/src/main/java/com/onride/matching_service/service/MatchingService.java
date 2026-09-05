@@ -13,8 +13,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
@@ -28,17 +31,33 @@ public class MatchingService {
     private final CostMatrixBuilder costMatrixBuilder;
     private final HungarianMatcher hungarianMatcher;
     private final MatchingProperties properties;
+    private final Clock clock;
 
     public void runMatchingCycle() {
+        sweepExpiredOffers();
+
         Map<String, List<PendingRideRequestDto>> pendingByCell = store.findAndDeleteAll();
+        Set<UUID> lockedDriverIds = matchedRideRequestStore.findLockedDriverIds();
 
         for (Map.Entry<String, List<PendingRideRequestDto>> entry : pendingByCell.entrySet()) {
-            matchCell(entry.getKey(), entry.getValue());
+            matchCell(entry.getKey(), entry.getValue(), lockedDriverIds);
         }
     }
 
-    private void matchCell(String cellId, List<PendingRideRequestDto> riders) {
-        List<AvailableDriverDto> drivers = locationGrpcClient.findDriversInCell(cellId);
+    private void sweepExpiredOffers() {
+        List<MatchedRideDto> expired = matchedRideRequestStore.findAndDeleteExpired(clock.millis());
+
+        for (MatchedRideDto match : expired) {
+            log.debug("Offer {} for ride {} expired without driver response, requeuing",
+                    match.matchId(), match.rider().rideId());
+            requeue(match.rider());
+        }
+    }
+
+    private void matchCell(String cellId, List<PendingRideRequestDto> riders, Set<UUID> lockedDriverIds) {
+        List<AvailableDriverDto> drivers = locationGrpcClient.findDriversInCell(cellId).stream()
+                .filter(driver -> !lockedDriverIds.contains(driver.driverId()))
+                .toList();
 
         long[][] cost = costMatrixBuilder.build(riders, drivers);
         HungarianMatcher.MatchResult result = hungarianMatcher.match(riders.size(), drivers.size(), cost);
@@ -56,7 +75,8 @@ public class MatchingService {
 
     private void lockMatch(PendingRideRequestDto rider, AvailableDriverDto driver, String cellId) {
         UUID matchId = UUID.randomUUID();
-        MatchedRideDto match = new MatchedRideDto(matchId, rider.rideId(), rider.riderId());
+        long expiresAt = clock.millis() + Duration.ofSeconds(properties.offerWindowSeconds()).toMillis();
+        MatchedRideDto match = new MatchedRideDto(matchId, expiresAt, rider);
 
         boolean locked = matchedRideRequestStore.tryLock(driver.driverId(), match);
         if (!locked) {
