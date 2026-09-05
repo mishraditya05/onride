@@ -34,6 +34,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.0")
 	// Feign is no longer used for inter-service calls (migrated to gRPC), kept for reference
 	// implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 	implementation("org.flywaydb:flyway-database-postgresql")

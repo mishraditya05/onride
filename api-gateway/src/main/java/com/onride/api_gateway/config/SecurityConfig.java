@@ -29,6 +29,9 @@ public class SecurityConfig {
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers("/api/v1/auth/signup", "/api/v1/auth/login").permitAll()
+                        .pathMatchers("/swagger-ui.html", "/swagger-ui/**", "/webjars/**", "/v3/api-docs/**",
+                                "/api/v1/rides/v3/api-docs", "/api/v1/auth/v3/api-docs",
+                                "/api/v1/locations/v3/api-docs").permitAll()
                         .pathMatchers("/api/v1/auth/users/**").hasRole("ADMIN")
                         .pathMatchers("/api/v1/rides/quotes", "/api/v1/rides/book").hasRole("RIDER")
                         .pathMatchers("/api/v1/rides/matches", "/api/v1/rides/*/accept").hasRole("DRIVER")
