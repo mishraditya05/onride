@@ -26,6 +26,7 @@ dependencies {
 	implementation("com.onride:onride-event-schemas:0.1.0")
 	implementation("com.onride:onride-grpc-contracts:0.1.0")
 	implementation("net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE")
+	implementation("net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE")
 	implementation("org.springframework.boot:spring-boot-starter-kafka")
 	implementation("io.confluent:kafka-avro-serializer:8.2.0")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")

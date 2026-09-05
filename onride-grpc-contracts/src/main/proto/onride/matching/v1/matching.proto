@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package onride.matching.v1;
+
+option java_package = "com.onride.matching.grpc.v1";
+option java_multiple_files = true;
+
+service MatchingService {
+  rpc GetMatchForDriver(GetMatchForDriverRequest) returns (GetMatchForDriverResponse);
+  rpc ConfirmMatch(ConfirmMatchRequest) returns (ConfirmMatchResponse);
+}
+
+message GetMatchForDriverRequest {
+  string driver_id = 1;
+}
+
+message GetMatchForDriverResponse {
+  bool found = 1;
+  string match_id = 2;
+  string ride_id = 3;
+  string rider_id = 4;
+}
+
+message ConfirmMatchRequest {
+  string driver_id = 1;
+  string match_id = 2;
+}
+
+message ConfirmMatchResponse {
+  bool confirmed = 1;
+  string ride_id = 2;
+  string rider_id = 3;
+}
