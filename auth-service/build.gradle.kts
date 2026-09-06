@@ -22,7 +22,7 @@ extra["springCloudVersion"] = "2025.1.2"
 
 dependencies {
 	implementation("com.onride:onride-common-web:0.2.0")
-	implementation("com.onride:onride-observability:0.1.0")
+	implementation("com.onride:onride-observability:0.2.0")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-flyway")
