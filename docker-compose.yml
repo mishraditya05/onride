@@ -41,3 +41,10 @@ services:
       KAFKA_CLUSTERS_0_NAME: onride
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
       KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8085
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: onride-jaeger
+    ports:
+      - "16686:16686"
+      - "4318:4318"
