@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "4.1.1"
 	id("io.spring.dependency-management") version "1.1.7"
+	id("com.google.cloud.tools.jib") version "3.5.4"
 }
 
 group = "com.onride"
@@ -56,4 +57,21 @@ tasks.withType<Test> {
 
 tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
 	jvmArgs(nativeAccess)
+}
+
+jib {
+	from {
+		image = "eclipse-temurin:26-jre"
+	}
+	to {
+		image = "docker.io/${project.findProperty("dockerHubUsername")}/onride-location-service"
+		auth {
+			username = project.findProperty("dockerHubUsername") as String?
+			password = project.findProperty("dockerHubToken") as String?
+		}
+		tags = setOf("latest")
+	}
+	container {
+		jvmFlags = nativeAccess
+	}
 }
