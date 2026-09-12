@@ -12,3 +12,6 @@ appendonlydir/
 # Local secrets
 .env
 *.env.local
+
+# Kubernetes secrets (real values) - *-secret.example.yaml versions stay tracked
+k8s/*-secret.yaml
