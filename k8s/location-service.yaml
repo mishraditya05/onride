@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: location-service
+  namespace: onride
+  labels:
+    app: location-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: location-service
+  template:
+    metadata:
+      labels:
+        app: location-service
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: location-service
+          image: docker.io/allstar98k/onride-location-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8082
+            - containerPort: 9095
+          env:
+            - name: MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT
+              value: "http://jaeger:4318/v1/traces"
+            - name: EUREKA_CLIENT_ENABLED
+              value: "false"
+            - name: SERVER_FORWARD_HEADERS_STRATEGY
+              value: "framework"
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: location-service-secret
+                  key: REDIS_URL
+          resources:
+            requests:
+              memory: "384Mi"
+              cpu: "150m"
+            limits:
+              memory: "512Mi"
+              cpu: "400m"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: location-service
+  namespace: onride
+spec:
+  selector:
+    app: location-service
+  ports:
+    - name: http
+      port: 8082
+      targetPort: 8082
+    - name: grpc
+      port: 9095
+      targetPort: 9095
