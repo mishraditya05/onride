@@ -15,6 +15,15 @@ All API requests go through the gateway: `http://localhost:8080`.
 
 Kafka UI: `localhost:8090`. Jaeger UI: `localhost:16686`.
 
+## Live deployment
+
+Running on AWS EKS, fronted by an nginx Ingress and a Cloudflare Tunnel (temporary link — changes if the tunnel pod restarts):
+
+- Swagger: https://banner-missing-rank-reaches.trycloudflare.com/webjars/swagger-ui/index.html
+- Jaeger: https://banner-missing-rank-reaches.trycloudflare.com/jaeger
+
+Deploys are automated via GitHub Actions on every push to `main`: builds and pushes all 5 app service images, then rolls them out to the cluster.
+
 ## User flow
 
 **Rider:** sign up/login → `POST /rides/quotes` for a fare estimate → `POST /rides/book` to request a ride → `GET /rides/matches` to check match status.
@@ -30,10 +39,11 @@ Kafka UI: `localhost:8090`. Jaeger UI: `localhost:16686`.
 - **Dynamic pricing** — surge pricing based on live driver-availability vs demand in an area. WIP.
 - **Distributed tracing with OpenTelemetry** — traces a request across every service, including over gRPC and Kafka, viewable in Jaeger.
 - **gRPC + Kafka** for inter-service communication — sync calls over gRPC, async events over Kafka with Avro.
+- **Kubernetes on AWS EKS** — Deployments/Services for the 5 app services (Eureka dropped in favor of native k8s service discovery), in-cluster Kafka + Schema Registry, external NeonDB + Redis, nginx Ingress fronting both the API and Jaeger, auto-deployed via GitHub Actions.
 
 ## Tech stack
 
-Java 26, Spring Boot 4, Spring Cloud Gateway, Eureka, PostgreSQL + Flyway, Redis, Kafka + Avro + Schema Registry, gRPC, Uber H3, OpenTelemetry + Jaeger, Spring Security + JWT, springdoc-openapi, Gradle (Kotlin DSL).
+Java 26, Spring Boot 4, Spring Cloud Gateway, Eureka, PostgreSQL + Flyway, Redis, Kafka + Avro + Schema Registry, gRPC, Uber H3, OpenTelemetry + Jaeger, Spring Security + JWT, springdoc-openapi, Gradle (Kotlin DSL), Docker (Jib), Kubernetes (AWS EKS) + nginx Ingress, GitHub Actions.
 
 ## API access
 
@@ -46,7 +56,6 @@ http://localhost:8080/webjars/swagger-ui/index.html
 
 - Real-time surge pricing
 - Metrics dashboards
-- Deployment
 
 ## Future
 
