@@ -1,0 +1,62 @@
+name: Deploy to EKS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 26
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '26'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Publish shared libraries to mavenLocal
+        run: |
+          cd onride-common-web && ./gradlew publishToMavenLocal --no-daemon && cd ..
+          cd onride-observability && ./gradlew publishToMavenLocal --no-daemon && cd ..
+          cd onride-grpc-contracts && ./gradlew publishToMavenLocal --no-daemon && cd ..
+          cd onride-event-schemas && ./gradlew publishToMavenLocal --no-daemon && cd ..
+
+      - name: Build and push images with Jib
+        env:
+          ORG_GRADLE_PROJECT_dockerHubUsername: ${{ secrets.DOCKERHUB_USERNAME }}
+          ORG_GRADLE_PROJECT_dockerHubToken: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          cd auth-service && ./gradlew jib --no-daemon && cd ..
+          cd location-service && ./gradlew jib --no-daemon && cd ..
+          cd matching-service && ./gradlew jib --no-daemon && cd ..
+          cd ride-service && ./gradlew jib --no-daemon && cd ..
+          cd api-gateway && ./gradlew jib --no-daemon && cd ..
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Update kubeconfig for onride-cluster
+        run: aws eks update-kubeconfig --name onride-cluster --region ap-south-1
+
+      - name: Apply Kubernetes manifests
+        run: kubectl apply -f k8s/
+
+      - name: Restart deployments to pick up new images
+        run: |
+          kubectl rollout restart deployment/auth-service -n onride
+          kubectl rollout restart deployment/location-service -n onride
+          kubectl rollout restart deployment/matching-service -n onride
+          kubectl rollout restart deployment/ride-service -n onride
+          kubectl rollout restart deployment/api-gateway -n onride
