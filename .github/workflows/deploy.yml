@@ -24,21 +24,23 @@ jobs:
 
       - name: Publish shared libraries to mavenLocal
         run: |
-          cd onride-common-web && ./gradlew publishToMavenLocal --no-daemon && cd ..
-          cd onride-observability && ./gradlew publishToMavenLocal --no-daemon && cd ..
-          cd onride-grpc-contracts && ./gradlew publishToMavenLocal --no-daemon && cd ..
-          cd onride-event-schemas && ./gradlew publishToMavenLocal --no-daemon && cd ..
+          set -e
+          ./onride-common-web/gradlew -p onride-common-web publishToMavenLocal --no-daemon
+          ./onride-observability/gradlew -p onride-observability publishToMavenLocal --no-daemon
+          ./onride-grpc-contracts/gradlew -p onride-grpc-contracts publishToMavenLocal --no-daemon
+          ./onride-event-schemas/gradlew -p onride-event-schemas publishToMavenLocal --no-daemon
 
       - name: Build and push images with Jib
         env:
           ORG_GRADLE_PROJECT_dockerHubUsername: ${{ secrets.DOCKERHUB_USERNAME }}
           ORG_GRADLE_PROJECT_dockerHubToken: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
-          cd auth-service && ./gradlew jib --no-daemon && cd ..
-          cd location-service && ./gradlew jib --no-daemon && cd ..
-          cd matching-service && ./gradlew jib --no-daemon && cd ..
-          cd ride-service && ./gradlew jib --no-daemon && cd ..
-          cd api-gateway && ./gradlew jib --no-daemon && cd ..
+          set -e
+          ./auth-service/gradlew -p auth-service jib --no-daemon
+          ./location-service/gradlew -p location-service jib --no-daemon
+          ./matching-service/gradlew -p matching-service jib --no-daemon
+          ./ride-service/gradlew -p ride-service jib --no-daemon
+          ./api-gateway/gradlew -p api-gateway jib --no-daemon
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
