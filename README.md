@@ -1,63 +1,55 @@
 # OnRide
 
-A distributed ride-hailing backend built as a hobby project to learn distributed systems hands-on.
+A ride-hailing backend built with Spring Boot microservices, Kafka, gRPC, and H3 geospatial matching, running on AWS EKS.
 
-## Running it locally
+## Live demo
 
-**Prerequisites:** Java 26, Postgres, Redis (local).
+**Swagger:** https://unable-absolutely-packs-blogging.trycloudflare.com/webjars/swagger-ui/index.html
+**Jaeger:** https://unable-absolutely-packs-blogging.trycloudflare.com/jaeger
 
-1. `docker-compose up -d` — starts Kafka, Schema Registry, Kafka UI, Jaeger.
-2. Start Redis locally.
-3. Each service has a `.env.example` — copy to `.env`, fill it in, set those as env vars (or in your IDE run config).
-4. Start `discovery-service` first, then the rest with `./gradlew bootRun` in each service directory.
+Deploys are automated via GitHub Actions on every push to `main`.
 
-All API requests go through the gateway: `http://localhost:8080`.
+## Design
 
-Kafka UI: `localhost:8090`. Jaeger UI: `localhost:16686`.
-
-## Live deployment
-
-Running on AWS EKS, fronted by an nginx Ingress and a Cloudflare Tunnel (temporary link — changes if the tunnel pod restarts):
-
-- Swagger: https://banner-missing-rank-reaches.trycloudflare.com/webjars/swagger-ui/index.html
-- Jaeger: https://banner-missing-rank-reaches.trycloudflare.com/jaeger
-
-Deploys are automated via GitHub Actions on every push to `main`: builds and pushes all 5 app service images, then rolls them out to the cluster.
-
-## User flow
-
-**Rider:** sign up/login → `POST /rides/quotes` for a fare estimate → `POST /rides/book` to request a ride → `GET /rides/matches` to check match status.
-
-**Driver:** sign up/login → onboard profile and vehicle (`/drivers/me`) → `POST /locations/ping` periodically to report location → `GET /rides/matches` to see offered rides → `POST /rides/{rideId}/accept` to accept one.
-
-(All routed through the gateway under `/api/v1/...`.)
-
-## Worth a look
-
-- **H3 geospatial indexing** for batching resources into small cells across the world for efficient management.
-- **Bipartite matching (Hungarian algorithm)** for batch ride-driver assignment and utilizing MCMF(Min Cost Max Flow) to get maximum matches per batch with minimum total cost.
-- **Dynamic pricing** — surge pricing based on live driver-availability vs demand in an area. WIP.
-- **Distributed tracing with OpenTelemetry** — traces a request across every service, including over gRPC and Kafka, viewable in Jaeger.
-- **gRPC + Kafka** for inter-service communication — sync calls over gRPC, async events over Kafka with Avro.
-- **Kubernetes on AWS EKS** — Deployments/Services for the 5 app services (Eureka dropped in favor of native k8s service discovery), in-cluster Kafka + Schema Registry, external NeonDB + Redis, nginx Ingress fronting both the API and Jaeger, auto-deployed via GitHub Actions.
+- **Matching** — ride requests and available drivers are batched on a fixed interval and assigned using the Hungarian algorithm.
+- **Geospatial lookups** — H3 hexagonal indexing for nearby-driver queries.
+- **Inter-service communication** — gRPC for synchronous calls, Kafka + Avro + Schema Registry for async events.
+- **Tracing** — requests are traced across HTTP, gRPC, and Kafka via OpenTelemetry, viewable in Jaeger.
+- **Deployment** — Kubernetes on AWS EKS, nginx Ingress, native k8s service discovery (no Eureka in the cluster).
 
 ## Tech stack
 
-Java 26, Spring Boot 4, Spring Cloud Gateway, Eureka, PostgreSQL + Flyway, Redis, Kafka + Avro + Schema Registry, gRPC, Uber H3, OpenTelemetry + Jaeger, Spring Security + JWT, springdoc-openapi, Gradle (Kotlin DSL), Docker (Jib), Kubernetes (AWS EKS) + nginx Ingress, GitHub Actions.
+Java 26 · Spring Boot 4 · Spring Cloud Gateway · PostgreSQL + Flyway · Redis · Kafka + Avro · gRPC · Uber H3 · OpenTelemetry + Jaeger · JWT · Docker (Jib) · Kubernetes (EKS) + nginx Ingress · GitHub Actions
 
-## API access
+<details>
+<summary>Architecture &amp; user flow</summary>
 
-Swagger, aggregated behind the gateway:
-```
-http://localhost:8080/webjars/swagger-ui/index.html
-```
+`api-gateway` → `auth-service`, `location-service`, `ride-service`, `matching-service`. `discovery-service` is local-dev only (no Eureka in k8s).
 
-## WIP
+**Rider:** signup/login → `POST /rides/quotes` → `POST /rides/book` → `GET /rides/matches`.
+**Driver:** signup/login → `/drivers/me` → `POST /locations/ping` → `GET /rides/matches` → `POST /rides/{id}/accept`.
+
+All under `/api/v1/...` via the gateway.
+
+</details>
+
+<details>
+<summary>Running it locally</summary>
+
+Prereqs: Java 26, Postgres, Redis.
+
+1. `docker-compose up -d` — Kafka, Schema Registry, Kafka UI, Jaeger
+2. Start Redis
+3. Copy each service's `.env.example` → `.env`, fill in
+4. Start `discovery-service`, then `./gradlew bootRun` per service
+
+Gateway: `localhost:8080` · Swagger: `/webjars/swagger-ui/index.html` · Kafka UI: `:8090` · Jaeger: `:16686`
+
+</details>
+
+## Future scope
 
 - Real-time surge pricing
-- Metrics dashboards
-
-## Future
-
-- WebSocket layer for drivers and riders — continuous location pings, driver liveness checks, direct driver-rider connection for live location exchange, and push notifications for ride matches instead of polling
-- Spring Cloud Config for centralized configuration — Eureka URL, Redis/Kafka endpoints, and OTel/Jaeger settings
+- Metrics dashboards (Prometheus + Grafana)
+- WebSocket layer for live location/match updates
+- Spring Cloud Config
