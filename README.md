@@ -5,6 +5,7 @@ A ride-hailing backend built with Spring Boot microservices, Kafka, gRPC, and H3
 ## Live demo
 
 **Swagger:** https://unable-absolutely-packs-blogging.trycloudflare.com/webjars/swagger-ui/index.html
+
 **Jaeger:** https://unable-absolutely-packs-blogging.trycloudflare.com/jaeger
 
 Deploys are automated via GitHub Actions on every push to `main`.
