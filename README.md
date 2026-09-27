@@ -18,6 +18,9 @@ Deploys are automated via GitHub Actions on every push to `main`.
 - **Tracing** — requests are traced across HTTP, gRPC, and Kafka via OpenTelemetry, viewable in Jaeger.
 - **Deployment** — Kubernetes on AWS EKS, nginx Ingress, native k8s service discovery (no Eureka in the cluster).
 
+  <img width="1420" height="646" alt="Screenshot 2026-09-27 at 2 36 01 PM" src="https://github.com/user-attachments/assets/ffeacbc8-f5d6-4b51-91ab-34e8f063e6f0" />
+
+
 ## Tech stack
 
 Java 26 · Spring Boot 4 · Spring Cloud Gateway · PostgreSQL + Flyway · Redis · Kafka + Avro · gRPC · Uber H3 · OpenTelemetry + Jaeger · JWT · Docker (Jib) · Kubernetes (EKS) + nginx Ingress · GitHub Actions
