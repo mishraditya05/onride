@@ -19,6 +19,7 @@ Deploys are automated via GitHub Actions on every push to `main`.
 - **Deployment** — Kubernetes on AWS EKS, nginx Ingress, native k8s service discovery (no Eureka in the cluster).
 
   <img width="1420" height="646" alt="Screenshot 2026-09-27 at 2 36 01 PM" src="https://github.com/user-attachments/assets/ffeacbc8-f5d6-4b51-91ab-34e8f063e6f0" />
+<img width="1501" height="838" alt="Untitled" src="https://github.com/user-attachments/assets/b6f8a616-5e88-44f8-8cbd-c3f49958b1a1" />
 
 
 ## Tech stack
