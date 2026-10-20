@@ -1,5 +1,6 @@
 package com.onride.ride_service.entity;
 
+import com.onride.ride_service.enums.MatchingMode;
 import com.onride.ride_service.enums.RideStatus;
 import com.onride.ride_service.enums.VehicleType;
 import jakarta.persistence.Column;
@@ -68,6 +69,16 @@ public class Ride {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private RideStatus status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "matching_mode", nullable = false)
+    private MatchingMode matchingMode;
+
+    @Column(name = "broadcast_message")
+    private String broadcastMessage;
+
+    @Column(name = "rider_note")
+    private String riderNote;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

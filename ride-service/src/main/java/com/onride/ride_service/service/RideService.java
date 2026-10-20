@@ -7,10 +7,12 @@ import com.onride.ride_service.client.dto.MatchInfoDto;
 import com.onride.ride_service.dto.AcceptMatchResponseDto;
 import com.onride.ride_service.dto.BookRideRequestDto;
 import com.onride.ride_service.dto.BookRideResponseDto;
+import com.onride.ride_service.dto.CancelRideResponseDto;
 import com.onride.ride_service.dto.PendingMatchResponseDto;
 import com.onride.ride_service.entity.Ride;
+import com.onride.ride_service.enums.MatchingMode;
 import com.onride.ride_service.enums.RideStatus;
-import com.onride.ride_service.enums.VehicleType;
+import com.onride.ride_service.exception.InvalidRideStateException;
 import com.onride.ride_service.grpc.MatchingGrpcClient;
 import com.onride.ride_service.mapper.RideEventMapper;
 import com.onride.ride_service.mapper.RideMapper;
@@ -24,11 +26,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class RideService {
+
+    private static final Set<RideStatus> CANCELLABLE_STATUSES = Set.of(RideStatus.REQUESTED, RideStatus.MATCHED);
 
     private final QuoteStore quoteStore;
     private final GeoIndex geoIndex;
@@ -56,7 +61,7 @@ public class RideService {
 
         String pickupGeoCell = geoIndex.toCell(quote.pickupLat(), quote.pickupLng());
 
-        Ride ride = buildRide(riderId, quote, request.vehicleType(), fare, pickupGeoCell);
+        Ride ride = buildRide(riderId, quote, request, fare, pickupGeoCell);
         rideRepository.save(ride);
 
         RideRequestedEvent event = rideEventMapper.toRideRequestedEvent(ride);
@@ -83,6 +88,11 @@ public class RideService {
         Ride ride = rideRepository.findById(rideId)
                 .orElseThrow(() -> new ResourceNotFoundException("Ride not found"));
 
+        if (ride.getStatus() != RideStatus.REQUESTED) {
+            throw new InvalidRideStateException(
+                    "Ride is " + ride.getStatus() + " and can no longer be accepted");
+        }
+
         ride.setDriverId(driverId);
         ride.setStatus(RideStatus.MATCHED);
         rideRepository.save(ride);
@@ -90,7 +100,24 @@ public class RideService {
         return new AcceptMatchResponseDto(ride.getId(), ride.getStatus(), ride.getDriverId());
     }
 
-    private static Ride buildRide(UUID riderId, Quote quote, VehicleType vehicleType,
+    @Transactional
+    public CancelRideResponseDto cancel(UUID riderId, UUID rideId) {
+        Ride ride = rideRepository.findById(rideId)
+                .filter(r -> r.getRiderId().equals(riderId))
+                .orElseThrow(() -> new ResourceNotFoundException("Ride not found"));
+
+        if (!CANCELLABLE_STATUSES.contains(ride.getStatus())) {
+            throw new InvalidRideStateException(
+                    "Ride is " + ride.getStatus() + " and can no longer be cancelled");
+        }
+
+        ride.setStatus(RideStatus.CANCELLED);
+        rideRepository.save(ride);
+
+        return new CancelRideResponseDto(ride.getId(), ride.getStatus());
+    }
+
+    private static Ride buildRide(UUID riderId, Quote quote, BookRideRequestDto request,
                                    BigDecimal fare, String pickupGeoCell) {
         Ride ride = new Ride();
         ride.setRiderId(riderId);
@@ -101,10 +128,13 @@ public class RideService {
         ride.setDropLng(quote.dropLng());
         ride.setPickupGeoCell(pickupGeoCell);
         ride.setDistanceMetres(quote.distanceMetres());
-        ride.setVehicleType(vehicleType);
+        ride.setVehicleType(request.vehicleType());
         ride.setFare(fare);
         ride.setCurrency(quote.currency());
         ride.setStatus(RideStatus.REQUESTED);
+        ride.setMatchingMode(request.matchingMode() == null ? MatchingMode.DIRECT : request.matchingMode());
+        ride.setBroadcastMessage(request.broadcastMessage());
+        ride.setRiderNote(request.riderNote());
         return ride;
     }
 }

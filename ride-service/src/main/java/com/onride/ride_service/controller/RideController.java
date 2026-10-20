@@ -4,6 +4,7 @@ import com.onride.ride_service.dto.AcceptMatchRequestDto;
 import com.onride.ride_service.dto.AcceptMatchResponseDto;
 import com.onride.ride_service.dto.BookRideRequestDto;
 import com.onride.ride_service.dto.BookRideResponseDto;
+import com.onride.ride_service.dto.CancelRideResponseDto;
 import com.onride.ride_service.dto.PendingMatchResponseDto;
 import com.onride.ride_service.dto.QuoteRequestDto;
 import com.onride.ride_service.dto.QuoteResponseDto;
@@ -54,5 +55,12 @@ public class RideController {
             @PathVariable UUID rideId,
             @Valid @RequestBody AcceptMatchRequestDto request) {
         return rideService.acceptMatch(driverId, rideId, request.matchId());
+    }
+
+    @PostMapping("/{rideId}/cancel")
+    public CancelRideResponseDto cancel(
+            @RequestHeader("X-User-Id") UUID riderId,
+            @PathVariable UUID rideId) {
+        return rideService.cancel(riderId, rideId);
     }
 }

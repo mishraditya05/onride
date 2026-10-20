@@ -1,5 +1,7 @@
 package com.onride.matching_service.dto;
 
+import com.onride.matching_service.enums.MatchingMode;
+
 import java.util.UUID;
 
 public record PendingRideRequestDto(
@@ -9,6 +11,7 @@ public record PendingRideRequestDto(
         double pickupLng,
         String pickupGeoCell,
         long requestedAt,
-        long waitPenaltySeconds
+        long waitPenaltySeconds,
+        MatchingMode matchingMode
 ) {
 }

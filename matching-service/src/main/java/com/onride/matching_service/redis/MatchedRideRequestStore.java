@@ -42,7 +42,43 @@ public class MatchedRideRequestStore {
                 List.of(RedisKeys.matched(driverId.toString())),
                 matchId.toString());
 
-        return json == null ? Optional.empty() : Optional.of(deserialize(json));
+        if (json == null) {
+            return Optional.empty();
+        }
+
+        MatchedRideDto confirmed = deserialize(json);
+        releaseOtherOffersForRide(confirmed.rider().rideId(), driverId);
+        return Optional.of(confirmed);
+    }
+
+    /**
+     * Drops any offers for a ride that another driver has just confirmed.
+     *
+     * <p>BROADCAST hands the same ride to several drivers at once, so confirming one leaves
+     * the losing offers behind. Left alone they expire and requeue a ride that is already
+     * matched, which puts it back into the matcher permanently.
+     */
+    private void releaseOtherOffersForRide(UUID rideId, UUID confirmedDriverId) {
+        Set<String> keys = redis.keys(RedisKeys.matchedPattern());
+        if (keys == null || keys.isEmpty()) {
+            return;
+        }
+
+        String confirmedKey = RedisKeys.matched(confirmedDriverId.toString());
+        for (String key : keys) {
+            if (key.equals(confirmedKey)) {
+                continue;
+            }
+
+            String json = redis.opsForValue().get(key);
+            if (json == null) {
+                continue;
+            }
+
+            if (deserialize(json).rider().rideId().equals(rideId)) {
+                redis.delete(key);
+            }
+        }
     }
 
     public Set<UUID> findLockedDriverIds() {

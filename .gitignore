@@ -15,3 +15,6 @@ appendonlydir/
 
 # Kubernetes secrets (real values) - *-secret.example.yaml versions stay tracked
 k8s/*-secret.yaml
+
+# Local planning notes
+docs/

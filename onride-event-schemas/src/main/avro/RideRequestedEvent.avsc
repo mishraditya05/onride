@@ -8,6 +8,12 @@
     { "name": "riderId", "type": "string" },
     { "name": "pickupGeoCell", "type": "string" },
     { "name": "pickupLat", "type": "double" },
-    { "name": "pickupLng", "type": "double" }
+    { "name": "pickupLng", "type": "double" },
+    {
+      "name": "matchingMode",
+      "type": "string",
+      "default": "DIRECT",
+      "doc": "Matching strategy to apply: DIRECT or BROADCAST. Defaulted so 0.2.0 consumers can still read messages produced by 0.1.0."
+    }
   ]
 }
