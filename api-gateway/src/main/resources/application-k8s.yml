@@ -28,3 +28,10 @@ spring:
                 - Path=/api/v1/rides/**
               filters:
                 - StripPrefix=2
+
+            - id: assistant-service
+              uri: http://assistant-service:8086
+              predicates:
+                - Path=/api/v1/assistant/**
+              filters:
+                - StripPrefix=2

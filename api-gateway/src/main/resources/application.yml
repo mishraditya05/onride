@@ -30,6 +30,13 @@ spring:
               filters:
                 - StripPrefix=2
 
+            - id: assistant-service
+              uri: lb://ASSISTANT-SERVICE
+              predicates:
+                - Path=/api/v1/assistant/**
+              filters:
+                - StripPrefix=2
+
 eureka:
   client:
     service-url:
@@ -54,6 +61,8 @@ springdoc:
         url: /api/v1/auth/v3/api-docs
       - name: location-service
         url: /api/v1/locations/v3/api-docs
+      - name: assistant-service
+        url: /api/v1/assistant/v3/api-docs
 
 onride:
   jwt:
